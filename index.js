@@ -22,6 +22,10 @@ openOrCreateDB.addEventListener('upgradeneeded', init => {
 
   db = init.target.result;
 
+  db.onerror = () => {
+    console.error('Error loading database.');
+  };
+
   const table = db.createObjectStore('todo_tb', { keyPath: 'id', autoIncrement:true });
 
   table.createIndex('title', 'title', { unique: false });
@@ -112,4 +116,6 @@ function deleteItem(e) {
       todos.appendChild(listItem);
     }
   });
+
+  transaction.addEventListener('error', () => console.log('Transaction error'));
 }
